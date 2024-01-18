@@ -6,56 +6,9 @@ import static com.github.standobyte.jojo.init.power.ModCommonRegisters.ACTIONS;
 import java.util.function.Supplier;
 
 import com.github.standobyte.jojo.JojoMod;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondBlockBullet;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondBlockCheckpointMake;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondBlockCheckpointMove;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondBloodCutter;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondHeal;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondHeavyPunch;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondLeaveObject;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondMisshapeBodyPart;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondMisshapingPunch;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondPreviousState;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondRepairItem;
-import com.github.standobyte.jojo.action.stand.CrazyDiamondRestoreTerrain;
-import com.github.standobyte.jojo.action.stand.HierophantGreenBarrier;
-import com.github.standobyte.jojo.action.stand.HierophantGreenEmeraldSplash;
-import com.github.standobyte.jojo.action.stand.HierophantGreenGrapple;
-import com.github.standobyte.jojo.action.stand.HierophantGreenStringAttack;
-import com.github.standobyte.jojo.action.stand.MagiciansRedCrossfireHurricane;
-import com.github.standobyte.jojo.action.stand.MagiciansRedDetector;
-import com.github.standobyte.jojo.action.stand.MagiciansRedFireball;
-import com.github.standobyte.jojo.action.stand.MagiciansRedFlameBurst;
-import com.github.standobyte.jojo.action.stand.MagiciansRedKick;
-import com.github.standobyte.jojo.action.stand.MagiciansRedRedBind;
-import com.github.standobyte.jojo.action.stand.SilverChariotDashAttack;
-import com.github.standobyte.jojo.action.stand.SilverChariotLightAttack;
-import com.github.standobyte.jojo.action.stand.SilverChariotMeleeBarrage;
-import com.github.standobyte.jojo.action.stand.SilverChariotRapierLaunch;
-import com.github.standobyte.jojo.action.stand.SilverChariotSweepingAttack;
-import com.github.standobyte.jojo.action.stand.SilverChariotTakeOffArmor;
-import com.github.standobyte.jojo.action.stand.StandAction;
-import com.github.standobyte.jojo.action.stand.StandEntityAction;
+import com.github.standobyte.jojo.action.stand.*;
 import com.github.standobyte.jojo.action.stand.StandEntityAction.AutoSummonMode;
 import com.github.standobyte.jojo.action.stand.StandEntityAction.Phase;
-import com.github.standobyte.jojo.action.stand.StandEntityActionModifier;
-import com.github.standobyte.jojo.action.stand.StandEntityBlock;
-import com.github.standobyte.jojo.action.stand.StandEntityHeavyAttack;
-import com.github.standobyte.jojo.action.stand.StandEntityLightAttack;
-import com.github.standobyte.jojo.action.stand.StandEntityMeleeBarrage;
-import com.github.standobyte.jojo.action.stand.StandEntityUnsummon;
-import com.github.standobyte.jojo.action.stand.StarPlatinumInhale;
-import com.github.standobyte.jojo.action.stand.StarPlatinumStarFinger;
-import com.github.standobyte.jojo.action.stand.StarPlatinumUppercut;
-import com.github.standobyte.jojo.action.stand.StarPlatinumZoom;
-import com.github.standobyte.jojo.action.stand.TheWorldBarrage;
-import com.github.standobyte.jojo.action.stand.TheWorldHeavyPunch;
-import com.github.standobyte.jojo.action.stand.TheWorldKick;
-import com.github.standobyte.jojo.action.stand.TheWorldTSHeavyAttack;
-import com.github.standobyte.jojo.action.stand.TheWorldTimeStop;
-import com.github.standobyte.jojo.action.stand.TimeResume;
-import com.github.standobyte.jojo.action.stand.TimeStop;
-import com.github.standobyte.jojo.action.stand.TimeStopInstant;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
@@ -119,14 +72,19 @@ public class ModStandsInit {
                 }
             });
     
-    
+    public static final RegistryObject<StandEntityLightAttack> BEARING_SHOT = ACTIONS.register("bearing_shot",
+            () -> new StandEntityLightAttack(new StandEntityLightAttack.Builder()));
     
 // ======================================== Star Platinum ========================================
-    
-    public static final RegistryObject<StandEntityLightAttack> STAR_PLATINUM_PUNCH = ACTIONS.register("star_platinum_punch", 
-            () -> new StandEntityLightAttack(new StandEntityLightAttack.Builder()
-                    .punchSound(ModSounds.STAR_PLATINUM_PUNCH_LIGHT)
-                    .standSound(Phase.WINDUP, ModSounds.STAR_PLATINUM_ORA)));
+
+    public static final RegistryObject<MagiciansRedFireball> SP_FIREBALL = ACTIONS.register("sp_fireball",
+            () -> new MagiciansRedFireball(new StandEntityAction.Builder().staminaCost(75).standPerformDuration(3)
+                    .resolveLevelToUnlock(2)
+                    .standPose(MagiciansRedFlameBurst.FLAME_BURST_POSE).standSound(ModSounds.MAGICIANS_RED_FIREBALL)
+                    .partsRequired(StandPart.MAIN_BODY)));
+
+    public static final RegistryObject<StandEntityLightAttack> STAR_PLATINUM_PUNCH = ACTIONS.register("star_platinum_punch",
+            () -> new ShootProjectile(new StandEntityAction().punchSound(() -> null), SP_FIREBALL));
     
     public static final RegistryObject<StandEntityMeleeBarrage> STAR_PLATINUM_BARRAGE = ACTIONS.register("star_platinum_barrage", 
             () -> new StandEntityMeleeBarrage(new StandEntityMeleeBarrage.Builder()

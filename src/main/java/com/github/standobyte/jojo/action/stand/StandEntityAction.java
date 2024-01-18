@@ -504,7 +504,7 @@ public abstract class StandEntityAction extends StandAction implements IStandPha
             MCUtil.rotateTowards(standEntity, targetPos, 360F);
         }
     }
-    
+
     public enum Phase {
         BUTTON_HOLD,
         WINDUP,
